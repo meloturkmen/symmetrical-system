@@ -9,11 +9,13 @@ const videoGrid = document.getElementById('video-grid')
 const myVideo = document.createElement('audio')
 myVideo.muted = true
 
+const SERVER_HOST = "216.24.57.3";
+
 const myPeer = new Peer(undefined, {
     path: "/peerjs",
-    host: "voice-chat-hn.onrender.com",
+    host: SERVER_HOST,
     port: "443",
-    secure: true
+    secure: true,
 })
 
 const peers = {}
@@ -28,7 +30,8 @@ const { username, room } = Qs.parse(location.search, {
 });
 
 // Insert into io('url') if different than window.location / domain
-const socket = io("https://voice-chat-hn.onrender.com");
+const SOCKET_URL = "https://216.24.57.3:443"
+const socket = io(SOCKET_URL);
 
 // Prevent duplicate username
 socket.on('sameName', () => {
