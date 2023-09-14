@@ -22,7 +22,7 @@ app.use("/peerjs", ExpressPeerServer(server, opinions));
 // Routing
 app.use(express.static(path.join(__dirname, 'public')));
 
-const botName = 'ZoomCord Bot';
+const botName = 'Chat Bot';
 const ACCEPTED_ROOMS = ["Game", "Development", "Main"];
 
 
