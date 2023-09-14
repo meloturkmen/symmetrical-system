@@ -28,7 +28,7 @@ const { username, room } = Qs.parse(location.search, {
 });
 
 // Insert into io('url') if different than window.location / domain
-const socket = io();
+const socket = io("https://voice-chat-hn.onrender.com");
 
 // Prevent duplicate username
 socket.on('sameName', () => {
