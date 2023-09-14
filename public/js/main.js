@@ -13,6 +13,7 @@ const myPeer = new Peer(undefined, {
     path: "/peerjs",
     host: "https://voice-chat-hn.onrender.com",
     port: "443",
+    secure: true
 })
 
 const peers = {}
