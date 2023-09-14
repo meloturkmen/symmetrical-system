@@ -11,7 +11,7 @@ myVideo.muted = true
 
 const myPeer = new Peer(undefined, {
     path: "/peerjs",
-    host: "https://voice-chat-hn.onrender.com",
+    host: "voice-chat-hn.onrender.com",
     port: "443",
     secure: true
 })

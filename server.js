@@ -3,13 +3,14 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+const cors = require("cors");
 const { ExpressPeerServer } = require("peer");
 
 
 const formatMessage = require('./utils/messages');
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 const opinions = {
@@ -17,12 +18,25 @@ const opinions = {
     allow_discovery: true
 }
 
+app.use(
+    cors({
+        origin: [
+            "https://voice-chat-hn.onrender.com",
+            "https://voice-chat-hn.onrender.com/",
+            'http://localhost:4000',
+            'http://localhost:3000',
+        ],
+        methods: ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE'],
+        credentials: true, // enable set cookie
+    })
+);
+
 app.use("/peerjs", ExpressPeerServer(server, opinions));
 
 // Routing
 app.use(express.static(path.join(__dirname, 'public')));
 
-const botName = 'Chat Bot';
+const botName = 'ZoomCord Bot';
 const ACCEPTED_ROOMS = ["Game", "Development", "Main"];
 
 
@@ -39,6 +53,8 @@ io.on('connection', socket => {
         }
 
         const user = userJoin(userPeerId, username, room);
+
+        console.log(user);
 
         if (!user) {
             socket.emit('sameName');
