@@ -9,13 +9,12 @@ const videoGrid = document.getElementById('video-grid')
 const myVideo = document.createElement('audio')
 myVideo.muted = true
 
-const SERVER_HOST = "216.24.57.3";
+const SERVER_HOST = "holonext-voice-chat-23.onrender.com";
 
 const myPeer = new Peer(undefined, {
     path: "/peerjs",
     host: SERVER_HOST,
     port: "443",
-    secure: true,
 })
 
 const peers = {}
@@ -30,7 +29,7 @@ const { username, room } = Qs.parse(location.search, {
 });
 
 // Insert into io('url') if different than window.location / domain
-const SOCKET_URL = "https://216.24.57.3:443"
+const SOCKET_URL = "https://holonext-voice-chat-23.onrender.com"
 const socket = io(SOCKET_URL);
 
 // Prevent duplicate username
