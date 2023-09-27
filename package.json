@@ -1,27 +1,26 @@
 {
-  "name": "chatcord",
-  "version": "1.0.0",
-  "description": "Real time chat",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server",
-    "dev": "nodemon server"
-  },
-  "author": "Khairul Imran",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "fs": "^0.0.1-security",
-    "http": "^0.0.1-security",
-    "install": "^0.13.0",
-    "moment": "^2.29.1",
-    "npm": "^10.1.0",
-    "peer": "^0.5.3",
-    "socket.io": "^3.0.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20.6.0",
-    "nodemon": "^2.0.6"
-  }
+	"name": "chatcord",
+	"version": "1.0.0",
+	"description": "Real time chat",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server",
+		"dev": "nodemon server",
+		"start:peer": "nodemon peerServer"
+	},
+	"author": "Khairul Imran",
+	"license": "ISC",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"fs": "^0.0.1-security",
+		"http": "^0.0.1-security",
+		"moment": "^2.29.1",
+		"peer": "^0.5.3",
+		"socket.io": "^4.6.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.6.0",
+		"nodemon": "^2.0.6"
+	}
 }

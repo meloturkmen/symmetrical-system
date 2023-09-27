@@ -2,8 +2,12 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-const { ExpressPeerServer } = require("peer");
+const io = require("socket.io")(server, {
+    allowEIO3: true,
+    cors: {
+        origin: "*",
+    },
+})
 
 
 const formatMessage = require('./utils/messages');
@@ -12,19 +16,13 @@ const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/u
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
-const opinions = {
-    debug: true,
-    allow_discovery: true
-}
 
-app.use("/peerjs", ExpressPeerServer(server, opinions));
 
 // Routing
 app.use(express.static(path.join(__dirname, 'public')));
 
-const botName = 'ZoomCord Bot';
+const botName = 'HoloChat Bot';
 const ACCEPTED_ROOMS = ["Game", "Development", "Main"];
-
 
 
 
