@@ -63,6 +63,35 @@ io.on('connection', socket => {
                 users: getRoomUsers(user.room) // E.g return: [{id: '6JhtU8cQGMZzzzj5AAAB', username: 'kaiimran', room: 'Malaysia'}]
             });
 
+            //send mute info to all users in room 
+            socket.on('mute', (userPeerId) => {
+                socket.broadcast.to(user.room).emit('mute', {
+                    userPeerId: userPeerId,
+                    username: user.username
+
+                })
+
+                // send unmute info as message to all users in room
+                socket.broadcast
+                    .to(user.room)
+                    .emit('message', formatMessage(botName, `${user.username} has muted`));
+            })
+
+            //send unmute info to all users in room
+            socket.on('unmute', (userPeerId) => {
+                socket.broadcast.to(user.room).emit('unmute', {
+                    userPeerId: userPeerId,
+                    username: user.username
+
+                })
+
+                // send mute info as message to all users in room
+                socket.broadcast
+                    .to(user.room)
+                    .emit('message', formatMessage(botName, `${user.username} has unmuted`));
+            })
+
+
             socket.on('typing', () => {
                 console.log('typing');
 
@@ -71,6 +100,8 @@ io.on('connection', socket => {
                     .emit('typing', {
                         username: user.username
                     });
+
+
             });
 
             socket.on('stop typing', () => {
@@ -115,3 +146,4 @@ io.on('connection', socket => {
     });
 
 });
+

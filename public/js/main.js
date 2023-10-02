@@ -6,6 +6,7 @@ const inputMessage = document.getElementById('msg');
 const TYPING_TIMER_LENGTH = 400; // ms
 
 const videoGrid = document.getElementById('video-grid')
+let myStream = null
 const myVideo = document.createElement('audio')
 myVideo.muted = true
 
@@ -56,6 +57,7 @@ navigator.mediaDevices.getUserMedia({
     video: false,
     audio: true
 }).then(stream => {
+    myStream = stream
     addVideoStream(myVideo, stream)
 
     myPeer.on('call', call => {
@@ -82,6 +84,31 @@ myPeer.on('open', userPeerId => {
     // On join chatroom
     socket.emit('joinRoom', { userPeerId, username, room });
 })
+
+socket.on('mute', (data) => {
+    console.log(data)
+    const userBox = document.getElementById(data.username);
+
+    const userMic = userBox.querySelector('.remote-mic');
+
+    const userMicIcon = userMic.querySelector('i');
+
+    userMicIcon.classList.remove('fa-microphone');
+    userMicIcon.classList.add('fa-microphone-slash');
+})
+
+socket.on('unmute', (data) => {
+    console.log(data)
+    const userBox = document.getElementById(data.username);
+
+    const userMic = userBox.querySelector('.remote-mic');
+
+    const userMicIcon = userMic.querySelector('i');
+
+    userMicIcon.classList.remove('fa-microphone-slash');
+    userMicIcon.classList.add('fa-microphone');
+});
+
 
 function connectToNewUser(userId, stream) {
     const call = myPeer.call(userId, stream)
@@ -224,10 +251,62 @@ function outputRoomName(room) {
     roomName.innerText = room;
 }
 
+
+
+function toggleMic() {
+    console.log('toggle mic');
+    const userPeerId = myPeer.id;
+
+
+    const userMic = document.querySelector('.user-mic');
+    const userMicIcon = userMic.querySelector('i');
+
+
+
+    if (userMicIcon.classList.contains('fa-microphone')) {
+        console.log('muted');
+        // disable audio on stream 
+        myStream.getAudioTracks()[0].enabled = false;
+
+
+        userMicIcon.classList.remove('fa-microphone');
+        userMicIcon.classList.add('fa-microphone-slash');
+        socket.emit('mute', userPeerId);
+    }
+    else {
+        console.log('unmuted');
+        //enable audio on stream
+        myStream.getAudioTracks()[0].enabled = true;
+
+        userMicIcon.classList.remove('fa-microphone-slash');
+        userMicIcon.classList.add('fa-microphone');
+        socket.emit('unmute', userPeerId);
+    }
+}
+
+
 // Add users list to DOM
 function outputUsers(users) {
-    // join the array to string. can also user foreach
+    // Set the current user as the first order
+    const currentUserIndex = users.findIndex(user => user.username === username);
+    const rearrangedUsers = [...users];
+    if (currentUserIndex !== -1) {
+        const [currentUser] = rearrangedUsers.splice(currentUserIndex, 1);
+        rearrangedUsers.unshift(currentUser);
+    }
+
     userList.innerHTML = `
-        ${users.map(user => `<li>${user.username}</li>`).join('')}
+        ${rearrangedUsers.map(user =>
+        `<li id="${user.username}" class="user-item ${user.username === username ? "user-box" : "remote-box"}">${user.username}
+            <div class="audio-toggle-btn ${user.username === username ? "user-mic" : "remote-mic"}">
+                <i class="fas fa-microphone"></i>
+            </div>
+        </li>`)
+            .join('')}
     `;
+
+
+    const userMic = document.querySelector('.user-mic');
+
+    userMic.addEventListener('click', toggleMic);
 }
